@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" integrity="sha512-IgmDkwzs96t4SrChW29No3NXBIBv8baW490zk5aXvhCD8vuZM3yUSkbyTBcXohkySecyzIrUwiF/qV0cuPcL3Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <title>Document</title>
+</head>
+<body>
+    <div class="card">
+        <h1 style="text-align: center;" class="title has-text-centerd animate__animated animate__bounce">{{main.Name}}</h1>
+            <form method="post" action="{% url 'submit' formkey=main.InviteKey %}" id="form"  >
+                {% csrf_token %}
+                <div id="parent" class="list-container">
+                    {%  for form in forms %}
+
+                    <div   class="list-item">
+                        <div id="{{form.parentID}}" class="input-container">
+                            {% if form.required %}
+                                <input name="{{form.formName}}" required type="{{form.formtype}}" placeholder="{{form.label}}">
+                            {% else %}
+                                <input name="{{form.formName}}"  type="{{form.formtype}}" placeholder="{{form.label}}">
+                            {%  endif %}
+                            <div id="more" onclick="AddMore('{{form.parentID}}')" class="button"><i class='bx bx-plus'></i></div>
+                            <div id="remove" onclick="RemoveMore('{{form.parentID}}')" class="button"><i class='bx bx-minus'></i></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <button class="button is-primary is-large">Submit</button>
+                <!-- <div onclick="Submit()" class="button is-primary is-large">Submit form</div> -->
+            </form>
+
+
+
+
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+</html>
+
+<style>
+    body{
+        padding: 10rem;
+    }
+
+    .card{
+        height: 30rem;
+        width: 100%;
+        padding: .75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        border-radius: 8px;
+    }
+
+    .list-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+   .list-item{
+       height: 3rem;
+       width: 100%;
+       display: flex;
+       justify-content: space-between;
+   } 
+   
+
+   .input-container{
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       width: 100%;
+       border-bottom: solid thin black;}
+
+   .input-container input{
+       height: 90%;
+       border: none;
+       outline: none;
+       width: 100%;
+   }
+</style>
+
+<script>
+    const AddMore = async (container)=>{
+        const doc = document.getElementById(container);
+        const parent = document.getElementById('parent')
+        const clone = doc.cloneNode(true);
+        clone.id = 'element-2'
+        const newform = await axios.get("{% url 'AddNewForm' %}")
+        console.log(newform.data);
+        parent.insertAdjacentHTML('afterend',newform.data) 
+        setTimeout(()=> doc.classList.add("animate__fadeIn"), 5000);
+
+    }
+
+    const RemoveMore = (element)=>{
+        const doc = document.getElementById(element);
+        doc.remove()
+    }
+
+
+    const Submit = async()=>{
+        const form = document.forms.form
+        let formData = new FormData(form)
+        console.log(formData.get('newfield'));
+    }
+
+</script>
