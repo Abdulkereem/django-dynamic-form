@@ -11,35 +11,86 @@
     <title>Document</title>
 </head>
 <body>
+    
     <div class="card">
-        <h1 style="text-align: center;" class="title has-text-centerd animate__animated animate__bounce">{{main.Name}}</h1>
-            <form method="post" action="{% url 'submit' formkey=main.InviteKey %}" id="form"  >
-                {% csrf_token %}
-                <div id="parent" class="list-container">
-                    {%  for form in forms %}
+        <header class="card-header">
+          <h1 style="text-align: center;" class="card-header-title title">
+            {{main.Name}}
+          </h1>
 
-                    <div   class="list-item">
-                        <div id="{{form.parentID}}" class="input-container">
-                            {% if form.required %}
-                                <input name="{{form.formName}}" required type="{{form.formtype}}" placeholder="{{form.label}}">
-                            {% else %}
-                                <input name="{{form.formName}}"  type="{{form.formtype}}" placeholder="{{form.label}}">
-                            {%  endif %}
-                            <div id="more" onclick="AddMore('{{form.parentID}}')" class="button"><i class='bx bx-plus'></i></div>
-                            <div id="remove" onclick="RemoveMore('{{form.parentID}}')" class="button"><i class='bx bx-minus'></i></div>
+        </header>
+        <form method="post" action="{% url 'submit' formkey=main.InviteKey %}" id="form"  >
+
+                {% csrf_token %}
+                  <div class="card-content">
+                    <div class="content">
+                        <div id="parent" class="list-container">
+                            {%  for form in forms %}
+        
+                            <div class="list-item">
+                                <div class="input-container">
+                                    {% if form.is_selectable == False %}
+                                    {% if form.required %}
+                                    <input name="{{form.formName}}" required type="{{form.formtype}}" placeholder="{{form.label}}">
+                                    {% else %}
+                                        <input name="{{form.formName}}"  type="{{form.formtype}}" placeholder="{{form.label}}">
+                                    {%  endif %}
+
+                                    {% endif %}
+
+                            {% if form.is_selectable %}
+                                {% if form.required %}    
+                                <select required>
+                                {% else %}
+                                <select>
+                                {% endif %}    
+                                    <option selected>{{form.label}}</option>
+                                {% for opt in form.options.all %}  
+                                    <option>{{opt.option}}</option>
+                                {% endfor %}
+
+                                </select>
+                            {% endif %}
+                                  
+                                </div>
+
+                        
+                            </div>
+
+
+
+                            {% endfor %}
+
+
+
+                            <div class="list-item">
+                                <div class="input-container">
+                                        <select name="states" required multiple size="2">
+                                         
+                                          <option selected>Select your state</option>
+                                          {% for s in states %}
+                                          {%if not s.disabled %}
+                                          <option value="{{s.state}}">{{s.state}}</option>
+                                          {% endif %}
+                                          {% endfor %}
+                                          
+                                        </select>
+                                </div>
+                            </div>
+
+                             
                         </div>
                     </div>
-                    {% endfor %}
-                </div>
-
-                <button class="button is-primary is-large">Submit</button>
-                <!-- <div onclick="Submit()" class="button is-primary is-large">Submit form</div> -->
+                  </div>
+        <footer class="card-footer">
+            <button type="submit" class="card-footer-item button is-primary">Submit</button>
+            <a onclick="AddMore('parent')" class="card-footer-item">Add new field</a>
+            <a href="#" class="card-footer-item">Refresh</a>
+        </footer>
             </form>
-
-
-
-
-    </div>
+        </div>
+ 
+      </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
@@ -85,6 +136,12 @@
        border: none;
        outline: none;
        width: 100%;
+   }
+
+   .input-container select{
+       width: 100%;
+       border: 0;
+       outline: none;
    }
 </style>
 

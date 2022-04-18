@@ -13,7 +13,10 @@ def form(request, formkey):
     print(formkey)
     main = models.MainForm.objects.get(InviteKey=formkey)
     forms = models.Forms.objects.filter(formParent=main).all()
-    return render(request,'./index.html',context={'forms':forms,'main':main})
+    states = models.States.objects.all()
+    return render(request,'./index.html',context={'forms':forms,
+                                                        'main':main,
+                                                        'states':states})
 
 fd = []
 def submit(request,formkey):
