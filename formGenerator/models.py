@@ -16,6 +16,7 @@ def GenerateUiid():
 class MainForm(models.Model):
     Name = models.CharField(max_length=500)
     InviteKey = models.TextField(default=GenerateUiid())
+    states    = models.ManyToManyField('States')
     def __str__(self) -> str:
         return self.Name
 

@@ -68,7 +68,7 @@
                                         <select name="states" required multiple size="2">
                                          
                                           <option selected>Select your state</option>
-                                          {% for s in states %}
+                                          {% for s in main.states.all %}
                                           {%if not s.disabled %}
                                           <option value="{{s.state}}">{{s.state}}</option>
                                           {% endif %}
