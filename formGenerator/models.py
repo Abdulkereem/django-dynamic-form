@@ -34,7 +34,7 @@ class Forms(models.Model):
     # parentID = models.CharField(max_length=500,default=GenerateRandom())
     is_selectable = models.BooleanField(default=False)
     # is_notselectable = models.BooleanField(default=False)
-    options  =     models.ManyToManyField(SelectOptions,related_name='select_field')
+    options  =     models.ManyToManyField(SelectOptions,related_name='select_field',blank=True,null=True)
     required = models.BooleanField(default=False)
 
     def __str__(self) -> str:
