@@ -39,12 +39,14 @@
                                     {% endif %}
 
                             {% if form.is_selectable %}
+                            <label for="select">{{form.label}}</label>
                                 {% if form.required %}    
-                                <select required>
+                                <select id="select" required>
+                                    <option value="">Choose</option>
                                 {% else %}
-                                <select>
+                                <select id="select">
+                                    <option value="">Choose</option>
                                 {% endif %}    
-                                    <option selected>{{form.label}}</option>
                                 {% for opt in form.options.all %}  
                                     <option>{{opt.option}}</option>
                                 {% endfor %}
